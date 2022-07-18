@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { notificationsActions } from "./notificationsSlice";
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -6,10 +7,17 @@ const cartSlice = createSlice({
         itemsList: [],
         totalQuantity: 0,
         total: 0,
-        showCart: false
+        showCart: false,
+        changed: false,
     },
     reducers: { 
+        replaceData(state, action) {
+            state.totalQuantity = action.payload.totalQuantity;
+            state.total = action.payload.total;
+            state.itemsList = action.payload.itemsList;
+        },
         addToCart(state, action) {
+            state.changed = true;
             const newItem = action.payload;
             const existingItem = state.itemsList.find(item => item.id === newItem.id);
             if(existingItem){
@@ -30,6 +38,7 @@ const cartSlice = createSlice({
 
         },
         removeFromCart(state, action) {
+            state.changed = true;
             const id = action.payload;
             const existingItem = state.itemsList.find(item => item.id === id);
             if(existingItem.quantity === 1) {
@@ -46,6 +55,60 @@ const cartSlice = createSlice({
         }
     }
 });
+
+export const sendCartData = (cart) => {
+    return async (dispatch) => {
+        dispatch(notificationsActions.showNotification({
+            open: true,
+            message: 'Sending Request',
+            type: 'warning',
+          })
+        );
+        const sendCart = async () => {
+            const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json",{
+              method: "PUT",
+              body: JSON.stringify(cart)
+            });
+            const data = await result.json();
+            dispatch(notificationsActions.showNotification({
+              open: true,
+              message: 'Sent request to database successfully',
+              type: 'success',
+            }));
+        };
+        try{
+            await sendCart();
+        }
+        catch(err) {
+            dispatch(notificationsActions.showNotification({
+                open: true,
+                message: 'Sent request to database failed',
+                type: 'error',
+            }));
+        }
+    }
+};
+
+export const getCartData = () => {
+    return async (dispatch) => {
+        const fetchHandler = async () => {
+            const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json");
+            const data = await result.json();
+            return data;
+        }
+        try{
+            const cartData = await fetchHandler();
+            dispatch(cartActions.replaceData(cartData));
+        }
+        catch (err) {
+            dispatch(notificationsActions.showNotification({
+                open: true,
+                message: 'Sent request to database failed',
+                type: 'error',
+            }));
+        }
+    }
+};
 
 export const cartActions = cartSlice.actions;
 export default cartSlice;
