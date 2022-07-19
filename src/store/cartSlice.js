@@ -1,5 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import { notificationsActions } from "./notificationsSlice";
+
+export const getCartData = createAsyncThunk('get/cart-data', async () => {
+    const fetchHandler = async () => {
+        const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json");
+        const data = await result.json();
+        return data;
+    }
+    try{
+        const cartData = await fetchHandler();
+        useDispatch(cartActions.replaceData(cartData));
+    }
+    catch (err) {
+        useDispatch(notificationsActions.showNotification({
+            open: true,
+            message: 'Sent request to database failed',
+            type: 'error',
+        }));
+    }
+});
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -53,6 +73,11 @@ const cartSlice = createSlice({
         setShowCart(state){
             state.showCart = !state.showCart;
         }
+    },
+    extraReducers: {
+        [getCartData.fulfilled]: (state, action) => {
+            state.cartItems = action.payload
+        },
     }
 });
 
@@ -76,31 +101,11 @@ export const sendCartData = (cart) => {
               type: 'success',
             }));
         };
+        
         try{
             await sendCart();
         }
         catch(err) {
-            dispatch(notificationsActions.showNotification({
-                open: true,
-                message: 'Sent request to database failed',
-                type: 'error',
-            }));
-        }
-    }
-};
-
-export const getCartData = () => {
-    return async (dispatch) => {
-        const fetchHandler = async () => {
-            const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json");
-            const data = await result.json();
-            return data;
-        }
-        try{
-            const cartData = await fetchHandler();
-            dispatch(cartActions.replaceData(cartData));
-        }
-        catch (err) {
             dispatch(notificationsActions.showNotification({
                 open: true,
                 message: 'Sent request to database failed',
