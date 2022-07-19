@@ -9,13 +9,27 @@ export const signup = createAsyncThunk('auth/signup', (data) => {
     .catch(error => console.log(error));
 });
 
-export const login = createAsyncThunk('auth/signup', (data) => {
+export const login = createAsyncThunk('auth/login', (data) => {
     return Auth.signInWithEmailAndPassword(authKey, data.name, data.password)
     .then(userCredential => console.log(userCredential))
     .catch(error => console.log(error));
 });
 
-export const logout = createAsyncThunk('auth/signup', () => {
+export const googleLogin = createAsyncThunk('auth/google-login', () => {
+    const provider = new Auth.GoogleAuthProvider();
+    return Auth.signInWithPopup(authKey, provider)
+    .then(userCredential => console.log(userCredential))
+    .catch(error => console.log(error));
+});
+
+export const facebookLogin = createAsyncThunk('auth/facebook-login', () => {
+    const provider = new Auth.FacebookAuthProvider();
+    return Auth.signInWithPopup(authKey, provider)
+    .then(userCredential => console.log(userCredential))
+    .catch(error => console.log(error));
+});
+
+export const logout = createAsyncThunk('auth/logout', () => {
     return Auth.signOut(authKey)
     .then(result => console.log(result))
     .catch(error => console.log(error));
@@ -55,6 +69,30 @@ const authSlice = createSlice({
             state.isLoading = false;
         },
         [login.rejected]:(state) => {
+            state.error = 'Something went wrong';
+            state.isLoading = false;
+        },
+        [googleLogin.pending]:(state) => {
+            state.isLoading = true;
+        },
+        [googleLogin.fulfilled]:(state, action) => {
+            console.log("data", action);
+            state.error = null;
+            state.isLoading = false;
+        },
+        [googleLogin.rejected]:(state) => {
+            state.error = 'Something went wrong';
+            state.isLoading = false;
+        },
+        [facebookLogin.pending]:(state) => {
+            state.isLoading = true;
+        },
+        [facebookLogin.fulfilled]:(state, action) => {
+            console.log("data", action);
+            state.error = null;
+            state.isLoading = false;
+        },
+        [facebookLogin.rejected]:(state) => {
             state.error = 'Something went wrong';
             state.isLoading = false;
         },

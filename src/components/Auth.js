@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
-import { signup, login } from '../store/authSlice';
+import { signup, login, googleLogin, facebookLogin } from '../store/authSlice';
 
 const Auth = ({ type = "signup" | "login"}) => {
   const dispatch = useDispatch();
@@ -19,8 +19,16 @@ const Auth = ({ type = "signup" | "login"}) => {
     e.preventDefault();
     validate();
     if(Object.keys(errors).length === 0){
-      dispatch(login(values));
+      type === "login" ? dispatch(login(values)) : dispatch(signup(values));
     }
+  }
+  const handleGoogleSignIn = (e) => {
+    e.preventDefault();
+    dispatch(googleLogin());
+  }
+  const handleFacebookSignIn = (e) => {
+    e.preventDefault();
+    dispatch(facebookLogin());
   }
 
   return (
@@ -33,6 +41,15 @@ const Auth = ({ type = "signup" | "login"}) => {
         <input type="password" name="password" value={values.password} onChange={(e) => setValues({ name: values.name, password: e.target.value})}/>
         <button className="bg-white text-lg text-violet-600 font-semibold" type="submit">
           {type === "login" ? "Login" : "Signup"}
+        </button>
+        <div>
+
+        </div>
+        <button className="border border-white text-lg text-white font-semibold" type="button" onClick={handleGoogleSignIn}>
+          Continue with Google
+        </button>
+        <button className="border border-white text-lg text-white font-semibold" type="button" onClick={handleFacebookSignIn}>
+          Continue with Facebook
         </button>
       </form>
     </div>
