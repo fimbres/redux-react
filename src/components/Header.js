@@ -41,7 +41,7 @@ const Header = () => {
                 {quantity}
               </span>}
             </span>
-            <button className="bg-gradient-to-b from-violet-500 to-fuchsia-500 text-white text-lg rounded-xl px-5 py-2 hover:opacity-70" onClick={handleLogout}>Logout</button>
+            <button className="bg-gradient-to-b from-fuchsia-500 to-violet-500 text-white text-lg rounded-xl px-5 py-2 hover:opacity-70" onClick={handleLogout}>Logout</button>
             <img src={currentUser.photo ? currentUser.photo : GuestImg} alt="logo" className="h-12 rounded-full aspect-square"/>
           </li>}
         </ul>

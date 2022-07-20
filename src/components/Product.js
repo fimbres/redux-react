@@ -5,7 +5,7 @@ import { cartActions } from "../store/cartSlice";
 const Product = ({ name, id, imgURL, price }) => {
   const dispatch = useDispatch();
   const addToCart = () => {
-    dispatch(cartActions.addToCart({id, name, price }));
+    dispatch(cartActions.addToCart({id, name, price, imgURL }));
   }
   return (
     <div className="flex items-center justify-between bg-gray-200 rounded-xl p-5">

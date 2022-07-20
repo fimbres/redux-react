@@ -39,7 +39,7 @@ const Auth = ({ type }) => {
       <div className="border-b border-gray-400 w-full px-5 py-3 flex justify-end items-center">
         <img src="https://cdn1.iconfinder.com/data/icons/thin-ui-1/100/Noun_Project_100Icon_1px_grid_thin_ic_x-512.png" alt="button" className="h-10 cursor-pointer" onClick={handleClose}/>
       </div>
-      <h1 className="text-5xl text-black font-semibold text-center py-5">{type === "login" ? "Login" : "Signup"}</h1>
+      <h2 className="text-5xl text-black font-semibold text-center py-5">{type === "login" ? "Login" : "Signup"}</h2>
       <form onSubmit={handleSubmit} className="flex flex-col px-10 pb-10">
         <label htmlFor="username" className="text-lg text-black mb-2">Username</label>
         <input type="text" name="username" className="p-2 bg-gray-200 rounded-md mb-4" value={values.name} onChange={(e) => setValues({ name: e.target.value, password: values.password})}/>

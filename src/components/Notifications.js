@@ -12,6 +12,6 @@ export const Notifications = ({type, message, open}) => {
     };
 
     return (
-        open && <Alert className='fixed inset-x-0 top-0' style={{zIndex:20}} severity={type} onClose={handleClose}>{message}</Alert>
+        open && <Alert className='fixed inset-x-0 top-0' style={{zIndex:15}} severity={type} onClose={handleClose}>{message}</Alert>
     );
 };
