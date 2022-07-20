@@ -82,6 +82,14 @@ const cartSlice = createSlice({
             else{
                 state.showCart = false;
             }
+        },
+        clearCart(state){
+            if(state.totalQuantity > 0){
+                state.itemsList = [];
+                state.totalQuantity = 0;
+                state.total = 0;
+                state.changed = true;
+            }
         }
     },
     extraReducers: {

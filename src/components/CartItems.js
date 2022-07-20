@@ -10,6 +10,11 @@ const CartItems = () => {
   const handleClose = (e) => {
     dispatch(cartActions.setShowCart());
   }
+  const handleCheckout = (e) => {
+    dispatch(cartActions.clearCart());
+    dispatch(cartActions.setShowCart());
+  }
+
   return (
     <div className="bg-white max-w-xl mx-auto rounded-xl p-8">
       <h2 className="text-4xl text-black font-semibold text-center pb-5">My Cart</h2>
@@ -20,7 +25,7 @@ const CartItems = () => {
           )}
         </div>
         <div className="text-lg text-black mb-5 font-medium text-center">Total: ${total.toFixed(2)}</div>
-        <button className="bg-gradient-to-b from-yellow-400 to-amber-500 py-2 rounded-lg text-lg text-white font-semibold hover:opacity-70" type="button">
+        <button className="bg-gradient-to-b from-yellow-400 to-amber-500 py-2 rounded-lg text-lg text-white font-semibold hover:opacity-70" type="button" onClick={handleCheckout}>
           Proceed to Checkout
         </button>
         <button className="border-2 border-gray-400 py-2 rounded-lg text-lg text-black font-semibold hover:opacity-70 mt-5" type="button" onClick={handleClose}>
