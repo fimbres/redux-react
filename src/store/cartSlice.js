@@ -1,41 +1,42 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
-import { notificationsActions } from "./notificationsSlice";
 
 export const getCartData = createAsyncThunk('get/cart-data', async () => {
-    const fetchHandler = async () => {
-        const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json");
-        const data = await result.json();
-        return data;
-    }
-    try{
-        const cartData = await fetchHandler();
-        useDispatch(cartActions.replaceData(cartData));
-    }
-    catch (err) {
-        useDispatch(notificationsActions.showNotification({
-            open: true,
-            message: 'Sent request to database failed',
-            type: 'error',
-        }));
-    }
+    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json")
+    .then(response => response.json()).catch(error => console.log(error));
+});
+
+export const sendCartData = createAsyncThunk('send/cart-data', (cart) => {
+    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json",{
+            method: "PUT",
+            body: JSON.stringify(cart)
+    }).then(response => response.json()).catch(error => console.log(error));
+});
+
+export const getProductsData = createAsyncThunk('get/products-data', async () => {
+    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/productsItems.json")
+    .then(response => response.json()).catch(error => console.log(error));
+});
+
+export const sendProductsData = createAsyncThunk('send/products-data', (products) => {
+    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/productsItems.json",{
+            method: "PUT",
+            body: JSON.stringify(products)
+    }).then(response => response.json()).catch(error => console.log(error));
 });
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState: { 
+        products: [],
         itemsList: [],
         totalQuantity: 0,
         total: 0,
         showCart: false,
         changed: false,
+        loading: false,
+        errors: null,
     },
-    reducers: { 
-        replaceData(state, action) {
-            state.totalQuantity = action.payload.totalQuantity;
-            state.total = action.payload.total;
-            state.itemsList = action.payload.itemsList;
-        },
+    reducers: {
         addToCart(state, action) {
             state.changed = true;
             const newItem = action.payload;
@@ -64,57 +65,75 @@ const cartSlice = createSlice({
             const existingItem = state.itemsList.find(item => item.id === id);
             if(existingItem.quantity === 1) {
                 state.itemsList = state.itemsList.filter(item => item.id !== id);
+                state.totalQuantity--;
             }
             else{
                 existingItem.quantity--;
                 existingItem.totalPrice -= existingItem.price;
             }
             state.total -= existingItem.price;
+            if(state.totalQuantity === 0){
+                state.showCart = false;
+            }
         },
         setShowCart(state){
-            state.showCart = !state.showCart;
+            if(state.totalQuantity > 0){
+                state.showCart = !state.showCart;
+            }
+            else{
+                state.showCart = false;
+            }
         }
     },
     extraReducers: {
+        [getCartData.pending]: (state) => {
+            state.loading = true;
+        },
         [getCartData.fulfilled]: (state, action) => {
-            state.cartItems = action.payload
+            state.totalQuantity = action.payload.totalQuantity;
+            state.total = action.payload.total;
+            state.itemsList = action.payload.itemsList;
+            state.errors = null;
+            state.loading = false;
+        },
+        [getCartData.rejected]: (state) => {
+            state.errors = 'Something went wrong';
+        },
+        [sendCartData.pending]: (state) => {
+            state.loading = true;
+        },
+        [sendCartData.fulfilled]: (state) => {
+            state.changed = false;
+            state.errors = null;
+            state.loading = false;
+        },
+        [sendCartData.rejected]: (state) => {
+            state.errors = 'Something went wrong';
+        },
+        [getProductsData.pending]: (state) => {
+            state.loading = true;
+        },
+        [getProductsData.fulfilled]: (state, action) => {
+            state.products = action.payload;
+            state.errors = null;
+            state.loading = false;
+        },
+        [getProductsData.rejected]: (state) => {
+            state.errors = 'Something went wrong';
+        },
+        [sendProductsData.pending]: (state) => {
+            state.loading = true;
+        },
+        [sendProductsData.fulfilled]: (state) => {
+            state.errors = null;
+            state.loading = false;
+        },
+        [sendProductsData.rejected]: (state) => {
+            state.errors = 'Something went wrong';
         },
     }
 });
 
-export const sendCartData = (cart) => {
-    return async (dispatch) => {
-        dispatch(notificationsActions.showNotification({
-            open: true,
-            message: 'Sending Request',
-            type: 'warning',
-          })
-        );
-        const sendCart = async () => {
-            const result = await fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/cartItems.json",{
-              method: "PUT",
-              body: JSON.stringify(cart)
-            });
-            const data = await result.json();
-            dispatch(notificationsActions.showNotification({
-              open: true,
-              message: 'Sent request to database successfully',
-              type: 'success',
-            }));
-        };
-        
-        try{
-            await sendCart();
-        }
-        catch(err) {
-            dispatch(notificationsActions.showNotification({
-                open: true,
-                message: 'Sent request to database failed',
-                type: 'error',
-            }));
-        }
-    }
-};
 
 export const cartActions = cartSlice.actions;
 export default cartSlice;

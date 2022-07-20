@@ -21,6 +21,9 @@ const Header = () => {
   const handleLogin = () => {
     dispatch(authActions.setShowLoginModal());
   };
+  const handleSignup = () => {
+    dispatch(authActions.setShowSignupModal());
+  };
 
   return (
     <header>
@@ -32,12 +35,12 @@ const Header = () => {
           </li>
           {!currentUser && <li className="flex items-center space-x-3">
             <div to="/login" className="text-lg mx-5 font-medium hover:opacity-60 text-gray-700 cursor-pointer" onClick={handleLogin}>Login</div>
-            <div to="/signup" className="text-lg mx-5 font-medium hover:opacity-60 text-gray-700 cursor-pointer">Signup</div>
+            <div to="/signup" className="text-lg mx-5 font-medium hover:opacity-60 text-gray-700 cursor-pointer" onClick={handleSignup}>Signup</div>
           </li>}
           {currentUser && <li className="flex items-center space-x-5">
-            <span onClick={showCart} className="text-lg font-medium cursor-pointer">
+            <span onClick={quantity > 0 ? showCart : undefined} className="text-lg font-medium cursor-pointer hover:opacity-70">
               My Cart
-              {<span className="py-0.5 px-2 ml-2 bg-gradient-to-b from-yellow-400 to-amber-500 text-white font-medium rounded-full aspect-square">
+              {quantity > 0 && <span className="py-0.5 px-2 ml-2 bg-gradient-to-b from-yellow-400 to-amber-500 text-white font-medium rounded-full aspect-square">
                 {quantity}
               </span>}
             </span>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { signup, login, googleLogin, facebookLogin, authActions } from '../store/authSlice';
+import { notificationsActions } from "../store/notificationsSlice";
 
 const Auth = ({ type }) => {
   const dispatch = useDispatch();
@@ -19,16 +20,46 @@ const Auth = ({ type }) => {
     e.preventDefault();
     validate();
     if(Object.keys(errors).length === 0){
-      type === "login" ? dispatch(login(values)) : dispatch(signup(values));
+      try{
+        type === "login" ? dispatch(login(values)) : dispatch(signup(values));
+        type === "login" ? dispatch(authActions.setShowLoginModal()) : dispatch(authActions.setShowSignupModal());
+      }
+      catch(err){
+        dispatch(notificationsActions.showNotification({
+          open: true, 
+          message: 'Login was failed',
+          type: 'danger',
+        }))
+      }
     }
   }
   const handleGoogleSignIn = (e) => {
     e.preventDefault();
-    dispatch(googleLogin());
+    try{
+      dispatch(googleLogin());
+      type === "login" ? dispatch(authActions.setShowLoginModal()) : dispatch(authActions.setShowSignupModal());
+    }
+    catch(err){
+      dispatch(notificationsActions.showNotification({
+        open: true, 
+        message: 'Login was failed',
+        type: 'danger',
+      }))
+    }
   }
   const handleFacebookSignIn = (e) => {
     e.preventDefault();
-    dispatch(facebookLogin());
+    try{
+      dispatch(facebookLogin());
+      type === "login" ? dispatch(authActions.setShowLoginModal()) : dispatch(authActions.setShowSignupModal());
+    }
+    catch(err){
+      dispatch(notificationsActions.showNotification({
+        open: true, 
+        message: 'Login was failed',
+        type: 'danger',
+      }))
+    }
   }
   const handleClose = (e) => {
     type === "login" ? dispatch(authActions.setShowLoginModal()) : dispatch(authActions.setShowSignupModal());

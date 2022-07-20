@@ -1,12 +1,20 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../store/authSlice";
 import { cartActions } from "../store/cartSlice";
 
 const Product = ({ name, id, imgURL, price }) => {
   const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.auth.currentUser);
   const addToCart = () => {
-    dispatch(cartActions.addToCart({id, name, price, imgURL }));
+    if(currentUser){
+      dispatch(cartActions.addToCart({id, name, price, imgURL }));
+    }
+    else{
+      dispatch(authActions.setShowLoginModal());
+    }
   }
+  
   return (
     <div className="flex items-center justify-between bg-gray-200 rounded-xl p-5">
       <div className="flex items-center">
