@@ -41,11 +41,19 @@ const authSlice = createSlice({
         currentUser: null,
         isLoading: false,
         error: null,
+        showLoginModal: false,
+        showSignupModal: false
     },
     reducers: {
         setUser(state, action){
             state.currentUser = action.payload;
-        }
+        },
+        setShowLoginModal(state){
+            state.showLoginModal = !state.showLoginModal;
+        },
+        setShowSignupModal(state){
+            state.showSignupModal = !state.showSignupModal;
+        },
     },
     extraReducers: {
         [signup.pending]:(state) => {

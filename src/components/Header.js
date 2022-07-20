@@ -1,32 +1,49 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { logout } from "../store/authSlice";
-import Cart from "./Cart";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Notifications } from "../components/Notifications";
+import { authActions, logout } from "../store/authSlice";
+import { cartActions } from "../store/cartSlice";
+import LogoImg from '../media/logo.png';
+import GuestImg from '../media/guest.jpg';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const notifications = useSelector(state => state.notifications.notifications);
+  const quantity = useSelector(state => state.cart.totalQuantity);
+  const currentUser = useSelector(state => state.auth.currentUser);
+  const showCart = () => {
+    dispatch(cartActions.setShowCart());
+  };
   const handleLogout = () => {
     dispatch(logout());
+  };
+  const handleLogin = () => {
+    dispatch(authActions.setShowLoginModal());
   };
 
   return (
     <header>
-      <nav className="header-nav">
-        <ul className="header-ul">
+      {notifications && <Notifications type={notifications.type} message={notifications.message} open={notifications.open}/>}
+      <nav className="fixed inset-x-0 top-0 z-10 bg-white rounded-3xl m-10">
+        <ul className="flex justify-between items-center px-10 py-3">
           <li>
-            <h2
-              className="header-h2"
-              style={{ fontFamily: "monospace", fontSize: "30px" }}
-            >
-              Redux Shopping App
-            </h2>
+            <img src={LogoImg} alt="logo" className="h-16"/>
           </li>
-          <li>
-            <Cart />
-          </li>
-          <li>
-            <button className="bg-red-700 rounded-md px-5 py-2 hover:opacity-70" onClick={() => handleLogout()}>Logout</button>
-          </li>
+          {!currentUser && <li className="flex items-center space-x-3">
+            <div to="/login" className="text-lg mx-5 font-medium hover:opacity-60 text-gray-700 cursor-pointer" onClick={handleLogin}>Login</div>
+            <div to="/signup" className="text-lg mx-5 font-medium hover:opacity-60 text-gray-700 cursor-pointer">Signup</div>
+          </li>}
+          {currentUser && <li className="flex items-center space-x-5">
+            <span onClick={showCart} className="text-lg font-medium cursor-pointer">
+              My Cart
+              {<span className="py-0.5 px-2 ml-2 bg-gradient-to-b from-yellow-400 to-amber-500 text-white font-medium rounded-full aspect-square">
+                {quantity}
+              </span>}
+            </span>
+            <button className="bg-gradient-to-b from-violet-500 to-fuchsia-500 text-white text-lg rounded-xl px-5 py-2 hover:opacity-70" onClick={handleLogout}>Logout</button>
+            <img src={currentUser.photo ? currentUser.photo : GuestImg} alt="logo" className="h-12 rounded-full aspect-square"/>
+          </li>}
         </ul>
       </nav>
     </header>

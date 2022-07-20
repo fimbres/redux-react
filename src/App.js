@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Router, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import * as auth from "firebase/auth";
 
 import Auth from "./components/Auth";
-import Layout from "./components/Layout";
-import { Notifications } from "./components/Notifications";
+// import Layout from "./components/Layout";
 import { sendCartData, getCartData } from "./store/cartSlice";
 import { initialize } from './utils/firebase';
 import { authActions } from "./store/authSlice";
-import Header from "./components/Header";
-import Cart from "./components/Cart";
 import Products from "./components/Products";
+import Header from "./components/Header";
+import Modal from "./components/Modal";
+import CartItems from "./components/CartItems";
 
 export const appKey = initialize();
 export const authKey = auth.getAuth(appKey);
@@ -19,10 +19,10 @@ let isFirstRender = true;
 
 function App() {
   const cart = useSelector(state => state.cart);
-  const currentUser = useSelector(state => state.auth.currentUser);
-  const notifications = useSelector(state => state.notifications.notifications);
   const dispatch = useDispatch();
-  const navigation = useNavigate();
+  const showLoginModal = useSelector(state => state.auth.showLoginModal);
+  const showSignupModal = useSelector(state => state.auth.showSignupModal);
+  const showCartModal = useSelector(state => state.cart.showCart);
 
   useEffect(() => {
     dispatch(getCartData());
@@ -40,7 +40,7 @@ function App() {
 
   auth.onAuthStateChanged(authKey, user => {
     if(user){
-        dispatch(authActions.setUser(user.email));
+        dispatch(authActions.setUser({email: user.email, photo: user.photoURL}));
     }
     else{
       dispatch(authActions.setUser(null));
@@ -48,25 +48,21 @@ function App() {
   });
 
   return (
-    <div className="App">
-      {notifications && <Notifications type={notifications.type} message={notifications.message} open={notifications.open}/>}
-      <Router>
-        <Route path="/" element={<Layout/>}>
-          <Route path="/" index element={<Products/>}/>
-          <Route path="/login" render={(props) => {
-            !currentUser ? <Auth type="login" {...props}/>
-            : navigation("/")
-          }}/>
-          <Route path="/signup" render={(props) => {
-            !currentUser ? <Auth type="signup" {...props}/>
-            : navigation("/")
-          }}/>
-          <Route path="/my-cart" render={(props) => {
-            !currentUser ? <Auth type="login" {...props}/>
-            : <Cart {...props}/>
-          }}/>
-        </Route>
-      </Router>
+    <div className="bg-gray-200 px-10 pb-10 pt-44 h-screen">
+      <Header />
+        <Routes>
+          <Route path="/" element={<Products/>}/>
+          <Route path="*" element={<h2>not found</h2>}/>
+        </Routes>
+      <Modal showModal={showLoginModal}>
+        <Auth type="login"/>
+      </Modal>
+      <Modal showModal={showSignupModal}>
+        <Auth type="signup"/>
+      </Modal>
+      <Modal showModal={showCartModal}>
+        <CartItems/>
+      </Modal>
     </div>
   );
 }
