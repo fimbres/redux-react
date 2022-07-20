@@ -17,17 +17,16 @@ export const getProductsData = createAsyncThunk('get/products-data', async () =>
     .then(response => response.json()).catch(error => console.log(error));
 });
 
-export const sendProductsData = createAsyncThunk('send/products-data', (products) => {
-    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/productsItems.json",{
-            method: "PUT",
-            body: JSON.stringify(products)
-    }).then(response => response.json()).catch(error => console.log(error));
+export const getPopularProductsData = createAsyncThunk('get/popular-products-data', async () => {
+    return fetch("https://redux-toolkit-project-6cfe2-default-rtdb.firebaseio.com/popularProductsItems.json")
+    .then(response => response.json()).catch(error => console.log(error));
 });
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState: { 
         products: [],
+        popularProducts: [],
         itemsList: [],
         totalQuantity: 0,
         total: 0,
@@ -121,14 +120,15 @@ const cartSlice = createSlice({
         [getProductsData.rejected]: (state) => {
             state.errors = 'Something went wrong';
         },
-        [sendProductsData.pending]: (state) => {
+        [getPopularProductsData.pending]: (state) => {
             state.loading = true;
         },
-        [sendProductsData.fulfilled]: (state) => {
+        [getPopularProductsData.fulfilled]: (state, action) => {
+            state.popularProducts = action.payload;
             state.errors = null;
             state.loading = false;
         },
-        [sendProductsData.rejected]: (state) => {
+        [getPopularProductsData.rejected]: (state) => {
             state.errors = 'Something went wrong';
         },
     }

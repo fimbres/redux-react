@@ -1,47 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Product from "./Product";
 import CoverImg from "../media/cover.png";
 import PopularProduct from "./PopularProduct";
 
-const products = [
-  {
-    id: 1,
-    name: "Nike Vapormax Plus Triple Black",
-    imgURL:
-      "https://th.bing.com/th/id/R.c9043541771fc0441534d08600a189d6?rik=NU6Vu6cyTjbQ7g&riu=http%3a%2f%2fimportedproducts.in%2fwp-content%2fuploads%2f2021%2f04%2fNike_black_dark2.jpeg&ehk=cTELzS7rU2sE4x3u%2b%2fPloREOH5qcYRW%2bGSBBWAys6xs%3d&risl=&pid=ImgRaw&r=0",
-    price: 450.78,
-    stars: 4.5
-  },
-  {
-    id: 2,
-    name: "Nike Air Backpack",
-    imgURL:
-      "https://th.bing.com/th/id/R.2562ac167993bd6e4f398d8bfe4d8ab4?rik=u9bl7Dme%2bThxYg&riu=http%3a%2f%2fcontent.backcountry.com%2fimages%2fitems%2f900%2fNKE%2fNKE013L%2fFLIGRE.jpg&ehk=XpigVs4BoIBMX2T3VHn86tdM9%2fAqLxpPuXsTpLqGcuM%3d&risl=&pid=ImgRaw&r=0",
-    price: 25.99,
-    stars: 3
-  },
-  {
-    id: 3,
-    name: "Nike Air Pants",
-    imgURL:
-      "https://www.cosmossport.gr/2139173-product_large/nike-m-df-run-stripe-wvn-pant.jpg",
-    price: 105.34,
-    stars: 4.5
-  },
-  {
-    id: 4,
-    name: "Nike Hoodie Fleece",
-    imgURL:
-      "https://media.topsports24.de/Artikelbilder/1000px/Nike_AW77_Fleece_Hoodie_598707-010.jpg",
-    price: 99.99,
-    stars: 5
-  },
-];
-
-const popularProducts = products.slice(0,2);
-
 const Products = () => {
+  const popularProducts = useSelector(state => state.cart.popularProducts);
+  const products = useSelector(state => state.cart.products);
+  
   return (
     <div className="flex w-full h-full space-x-10">
       <div className="flex flex-col w-full space-y-10">

@@ -6,6 +6,7 @@ import { cartActions } from "../store/cartSlice";
 const CartItems = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart.itemsList);
+  const total = useSelector(state => state.cart.total);
   const handleClose = (e) => {
     dispatch(cartActions.setShowCart());
   }
@@ -18,6 +19,7 @@ const CartItems = () => {
               <CartItem key={index} id={cartItem.id} quantity={cartItem.quantity} price={cartItem.price} total={cartItem.totalPrice} name={cartItem.name} imgURL={cartItem.imgURL} />
           )}
         </div>
+        <div className="text-lg text-black mb-5 font-medium text-center">Total: ${total.toFixed(2)}</div>
         <button className="bg-gradient-to-b from-yellow-400 to-amber-500 py-2 rounded-lg text-lg text-white font-semibold hover:opacity-70" type="button">
           Proceed to Checkout
         </button>

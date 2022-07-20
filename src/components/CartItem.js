@@ -22,7 +22,7 @@ const CartItem = ({ name, quantity, total, price, id, imgURL }) => {
         <img src={imgURL} alt={name} className="w-20 rounded-lg aspect-square mr-5"/>
         <div>
           <p className="text-lg font-semibold break-words">{name}</p>
-          <p className="text-lg font-regular italic text-gray-600">${price}, Total ${total}</p>
+          <p className="text-lg font-regular italic text-gray-600">${price.toFixed(2)}, Total ${total.toFixed(2)}</p>
         </div>
       </div>
       <div className="flex flex-col justify-center items-center space-y-1">

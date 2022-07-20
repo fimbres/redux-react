@@ -21,7 +21,7 @@ const Product = ({ name, id, imgURL, price }) => {
         <img src={imgURL} alt={name} className="w-20 rounded-lg aspect-square mr-5"/>
         <div>
           <p className="text-lg font-semibold break-words">{name}</p>
-          <p className="text-lg font-regular italic text-gray-600">${price}</p>
+          <p className="text-lg font-regular italic text-gray-600">${price.toFixed(2)}</p>
         </div>
       </div>
       <button className="px-4 py-2 rounded-lg bg-gradient-to-b from-yellow-400 to-amber-500 text-white hover:opacity-70" onClick={addToCart}>Add to cart</button>

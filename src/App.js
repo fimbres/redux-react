@@ -5,13 +5,14 @@ import * as auth from "firebase/auth";
 
 import Auth from "./components/Auth";
 // import Layout from "./components/Layout";
-import { sendCartData, getCartData } from "./store/cartSlice";
+import { sendCartData, getCartData, getPopularProductsData, getProductsData } from "./store/cartSlice";
 import { initialize } from './utils/firebase';
 import { authActions } from "./store/authSlice";
 import Products from "./components/Products";
 import Header from "./components/Header";
 import Modal from "./components/Modal";
 import CartItems from "./components/CartItems";
+import NotFound from "./components/NotFound";
 
 export const appKey = initialize();
 export const authKey = auth.getAuth(appKey);
@@ -26,6 +27,8 @@ function App() {
 
   useEffect(() => {
     dispatch(getCartData());
+    dispatch(getPopularProductsData());
+    dispatch(getProductsData());
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,7 +55,7 @@ function App() {
       <Header />
         <Routes>
           <Route path="/" element={<Products/>}/>
-          <Route path="*" element={<h2>not found</h2>}/>
+          <Route path="*" element={<NotFound/>}/>
         </Routes>
       <Modal showModal={showLoginModal}>
         <Auth type="login"/>
