@@ -84,12 +84,12 @@ const Auth = ({ type }) => {
           <div className="px-3 font-semibold">OR</div>
           <div className="border-b border-gray-400 w-full"/>
         </div>
-        <button className="flex items-center justify-center border-2 border-gray-600 py-2 rounded-lg text-lg text-gray-600 font-semibold hover:opacity-70 mb-5" type="button" onClick={handleGoogleSignIn}>
-          <img src="https://imagensemoldes.com.br/wp-content/uploads/2020/04/imagem-google-logo-com-fundo-transparente-1.png" alt="Google Logo" className="h-9 pr-2"/>
+        <button className="flex items-center justify-center border-2 border-gray-600 py-2 rounded-lg text-regular lg:text-lg text-gray-600 font-semibold hover:opacity-70 mb-5" type="button" onClick={handleGoogleSignIn}>
+          <img src="https://imagensemoldes.com.br/wp-content/uploads/2020/04/imagem-google-logo-com-fundo-transparente-1.png" alt="Google Logo" className="h-6 lg:h-9 pr-2"/>
           Continue with Google
         </button>
-        <button className="flex items-center justify-center bg-blue-800 py-2 rounded-lg text-lg text-white font-semibold hover:opacity-70" type="button" onClick={handleFacebookSignIn}>
-          <img src="https://www.pngkey.com/png/full/153-1536567_facebook-twitter-pinterest-facebook-logo-png-white.png" alt="Facebook Logo" className="h-10 pr-2"/>
+        <button className="flex items-center justify-center bg-blue-800 py-2 rounded-lg text-regular lg:text-lg text-white font-semibold hover:opacity-70" type="button" onClick={handleFacebookSignIn}>
+          <img src="https://www.pngkey.com/png/full/153-1536567_facebook-twitter-pinterest-facebook-logo-png-white.png" alt="Facebook Logo" className="h-7 lg:h-10 pr-1 lg:pr-2"/>
           Continue with Facebook
         </button>
       </form>

@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import * as auth from "firebase/auth";
 
 import Auth from "./components/Auth";
-// import Layout from "./components/Layout";
 import { sendCartData, getCartData, getPopularProductsData, getProductsData } from "./store/cartSlice";
 import { initialize } from './utils/firebase';
 import { authActions } from "./store/authSlice";
@@ -51,7 +50,7 @@ function App() {
   });
 
   return (
-    <div className="bg-gray-200 px-10 pb-10 pt-44 h-screen">
+    <div className="bg-gray-100 px-5 md:px-10 pb-5 md:pb-10 pt-28 md:pt-44 lg:h-screen">
       <Header />
         <Routes>
           <Route path="/" element={<Products/>}/>
