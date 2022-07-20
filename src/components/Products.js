@@ -12,7 +12,7 @@ const Products = () => {
   return (
     <div className="flex flex-col md:flex-row w-full h-full space-y-5 md:space-y-0 space-x-0 md:space-x-10">
       <div className="flex flex-col w-full space-y-5 md:space-y-10">
-        <div className="flex justify-center relative rounded-3xl h-full overflow-hidden bg-red-400">
+        <div className="flex justify-center relative rounded-3xl h-full overflow-hidden">
           <img src={CoverImg} className="absolute object-cover h-full w-full" alt="cover"/>
           <div className="flex flex-col justify-end items-start w-full p-5 lg:p-10" style={{zIndex: "5"}}>
             <div className="text-white text-xl lg:text-4xl w-1/2 break-words mb-5">Shoping Your Best Products!</div>
