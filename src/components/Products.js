@@ -1,5 +1,6 @@
 import React from "react";
 import Product from "./Product";
+
 const DUMMY_PRODUCTS = [
   {
     id: 1,
@@ -37,6 +38,7 @@ const DUMMY_PRODUCTS = [
     price: 25,
   },
 ];
+
 const Products = () => {
   return (
     <div>
