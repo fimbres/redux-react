@@ -99,7 +99,7 @@ const cartSlice = createSlice({
         [getCartData.fulfilled]: (state, action) => {
             state.totalQuantity = action.payload.totalQuantity;
             state.total = action.payload.total;
-            state.itemsList = action.payload.itemsList;
+            state.itemsList = action.payload.itemsList || [];
             state.errors = null;
             state.loading = false;
         },
